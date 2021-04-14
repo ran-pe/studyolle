@@ -4,13 +4,19 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
-@Getter @Setter @EqualsAndHashCode(of = "id")
-@Builder @AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Account {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     @Column(unique = true)
@@ -35,7 +41,8 @@ public class Account {
 
     private String location;
 
-    @Lob @Basic(fetch = FetchType.EAGER)
+    @Lob
+    @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
     private boolean studyCreatedByEmail;
@@ -50,5 +57,7 @@ public class Account {
 
     private boolean studyUpdatedByWeb;
 
-
+    public void generateEmailCheckToken() {
+        this.emailChekToken = UUID.randomUUID().toString();
+    }
 }

@@ -13,9 +13,11 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>studyolle</name>
     <description>Study management web service</description>
+
     <properties>
         <java.version>11</java.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
