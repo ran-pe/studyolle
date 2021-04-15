@@ -16,12 +16,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
 
 @Controller
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
     private final AccountRepository accountRepository;
     private final JavaMailSender javaMailSender;
+
+    public AccountController(SignUpFormValidator signUpFormValidator, AccountRepository accountRepository, JavaMailSender javaMailSender) {
+        this.signUpFormValidator = signUpFormValidator;
+        this.accountRepository = accountRepository;
+        this.javaMailSender = javaMailSender;
+    }
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder) {
