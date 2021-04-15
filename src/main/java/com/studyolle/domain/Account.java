@@ -29,7 +29,7 @@ public class Account {
 
     private boolean emailVerified;
 
-    private String emailChekToken;
+    private String emailCheckToken;
 
     private LocalDateTime joinedAt;
 
@@ -53,11 +53,11 @@ public class Account {
 
     private boolean studyEnrollmentResultByWeb;
 
-    private boolean studyUpdateByEmail;
+    private boolean studyUpdatedByEmail;
 
     private boolean studyUpdatedByWeb;
 
     public void generateEmailCheckToken() {
-        this.emailChekToken = UUID.randomUUID().toString();
+        this.emailCheckToken = UUID.randomUUID().toString();
     }
 }
