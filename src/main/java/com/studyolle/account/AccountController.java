@@ -1,9 +1,6 @@
 package com.studyolle.account;
 
-import com.studyolle.domain.Account;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -16,18 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
 
 @Controller
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
-    private final AccountRepository accountRepository;
-    private final JavaMailSender javaMailSender;
-
-    public AccountController(SignUpFormValidator signUpFormValidator, AccountRepository accountRepository, JavaMailSender javaMailSender) {
-        this.signUpFormValidator = signUpFormValidator;
-        this.accountRepository = accountRepository;
-        this.javaMailSender = javaMailSender;
-    }
+    private final AccountService accountService;
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -46,24 +36,7 @@ public class AccountController {
             return "account/sign-up";
         }
 
-        Account account = Account.builder()
-                .email(signUpForm.getEmail())
-                .nickname(signUpForm.getNickname())
-                .password(signUpForm.getPassword()) // TODO encoding 해야함
-                .studyCreatedByWeb(true)
-                .studyEnrollmentResultByWeb(true)
-                .studyUpdatedByWeb(true)
-                .build();
-
-        Account newAccount = accountRepository.save(account);
-        newAccount.generateEmailCheckToken();
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(newAccount.getEmail());
-        simpleMailMessage.setSubject("스터디올래, 회원 가입 인증");
-        simpleMailMessage.setText("/check-email-token?token=" + newAccount.getEmailCheckToken() + "&email=" + newAccount.getEmail());
-
-        javaMailSender.send(simpleMailMessage);
-
+        accountService.processNewAccount(signUpForm);
         return "redirect:/";
     }
 }
