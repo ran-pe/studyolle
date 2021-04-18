@@ -59,14 +59,14 @@ class AccountControllerTest {
     @Test
     void signUpSubmit_with_correct_input() throws Exception {
         mockMvc.perform(post("/sign-up")
-                .param("nickname", "youngran")
-                .param("email", "youngran@email.com")
+                .param("nickname", "youngran1")
+                .param("email", "youngran1@email.com")
                 .param("password", "12345678")
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
 
-        assertTrue(accountRepository.existsByEmail("youngran@email.com"));
+        assertTrue(accountRepository.existsByEmail("youngran1@email.com"));
         then(javaMailSender).should().send(any(SimpleMailMessage.class));
     }
 
@@ -74,16 +74,17 @@ class AccountControllerTest {
     @Test
     void signUpSubmit_with_password_valid() throws Exception {
         mockMvc.perform(post("/sign-up")
-                .param("nickname", "youngran")
-                .param("email", "youngran@email.com")
+                .param("nickname", "youngran2")
+                .param("email", "youngran2@email.com")
                 .param("password", "12345678")
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
 
-        Account account = accountRepository.findByEmail("youngran@email.com");
+        Account account = accountRepository.findByEmail("youngran2@email.com");
         assertNotNull(account);
         assertNotEquals(account.getPassword(), "12345678");
+        assertNotNull(account.getEmailCheckToken());
         then(javaMailSender).should().send(any(SimpleMailMessage.class));
     }
 
