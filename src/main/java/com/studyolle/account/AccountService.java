@@ -53,6 +53,7 @@ public class AccountService implements UserDetailsService {
         javaMailSender.send(simpleMailMessage);
     }
 
+    @Transactional
     public void login(Account account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 new UserAccount(account),
