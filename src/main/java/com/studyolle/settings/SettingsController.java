@@ -3,7 +3,7 @@ package com.studyolle.settings;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studyolle.account.AccountService;
-import com.studyolle.account.CurrentUser;
+import com.studyolle.account.CurrentAccount;
 import com.studyolle.account.form.TagForm;
 import com.studyolle.domain.Account;
 import com.studyolle.domain.Tag;
@@ -65,14 +65,14 @@ public class SettingsController {
     }
 
     @GetMapping(SETTINGS_PROFILE_URL)
-    public String updateProfileForm(@CurrentUser Account account, Model model) {
+    public String updateProfileForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(account, Profile.class));
         return SETTINGS_PROFILE_VIEW_NAME;
     }
 
     @PostMapping(SETTINGS_PROFILE_URL)
-    public String updateProfile(@CurrentUser Account account, @Valid Profile profile, Errors errors, Model model, RedirectAttributes attributes) {
+    public String updateProfile(@CurrentAccount Account account, @Valid Profile profile, Errors errors, Model model, RedirectAttributes attributes) {
         if(errors.hasErrors()) {
             model.addAttribute(account);
             return SETTINGS_PROFILE_VIEW_NAME;
@@ -84,14 +84,14 @@ public class SettingsController {
     }
 
     @GetMapping(SETTINGS_PASSWORD_URL)
-    public String updatePasswordForm(@CurrentUser Account account, Model model) {
+    public String updatePasswordForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(new PasswordForm());
         return SETTINGS_PASSWORD_VIEW_NAME;
     }
 
     @PostMapping(SETTINGS_PASSWORD_URL)
-    public String updatePassword(@CurrentUser Account account, @Valid PasswordForm passwordForm, Errors errors, Model model, RedirectAttributes attributes) {
+    public String updatePassword(@CurrentAccount Account account, @Valid PasswordForm passwordForm, Errors errors, Model model, RedirectAttributes attributes) {
         if(errors.hasErrors()) {
             model.addAttribute(account);
             return SETTINGS_PASSWORD_VIEW_NAME;
@@ -103,14 +103,14 @@ public class SettingsController {
     }
 
     @GetMapping(SETTINGS_NOTIFICATIONS_URL)
-    public String updateNotificationsForm(@CurrentUser Account account, Model model) {
+    public String updateNotificationsForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(account, Notifications.class));
         return SETTINGS_NOTIFICATIONS_VIEW_NAME;
     }
 
     @PostMapping(SETTINGS_NOTIFICATIONS_URL)
-    public String updateNotitications(@CurrentUser Account account, @Valid Notifications notifications, Errors errors, Model model, RedirectAttributes attributes) {
+    public String updateNotitications(@CurrentAccount Account account, @Valid Notifications notifications, Errors errors, Model model, RedirectAttributes attributes) {
         if(errors.hasErrors()) {
             model.addAttribute(account);
             return SETTINGS_NOTIFICATIONS_VIEW_NAME;
@@ -122,14 +122,14 @@ public class SettingsController {
     }
 
     @GetMapping(SETTINGS_ACCOUNT_URL)
-    public String updateAccountForm(@CurrentUser Account account, Model model) {
+    public String updateAccountForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(account, NicknameForm.class));
         return SETTINGS_ACCOUNT_VIEW_NAME;
     }
 
     @PostMapping(SETTINGS_ACCOUNT_URL)
-    public String updateAccount(@CurrentUser Account account, @Valid NicknameForm nicknameForm, Errors errors, Model model, RedirectAttributes attributes) {
+    public String updateAccount(@CurrentAccount Account account, @Valid NicknameForm nicknameForm, Errors errors, Model model, RedirectAttributes attributes) {
         if(errors.hasErrors()) {
             model.addAttribute(account);
             return SETTINGS_ACCOUNT_VIEW_NAME;
@@ -141,7 +141,7 @@ public class SettingsController {
     }
 
     @GetMapping(SETTINGS_TAGS_URL)
-    public String updateTag(@CurrentUser Account account, Model model) throws JsonProcessingException {
+    public String updateTag(@CurrentAccount Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
         Set<Tag> tags = accountService.getTags(account);
         model.addAttribute("tags", tags.stream().map(Tag::getTitle).collect(Collectors.toList()));
@@ -153,7 +153,7 @@ public class SettingsController {
 
     @PostMapping(SETTINGS_TAGS_URL + "/add")
     @ResponseBody
-    public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+    public ResponseEntity addTag(@CurrentAccount Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();
 
         Tag tag = tagRepository.findByTitle(title);
@@ -167,7 +167,7 @@ public class SettingsController {
 
     @PostMapping(SETTINGS_TAGS_URL + "/remove")
     @ResponseBody
-    public ResponseEntity removeTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+    public ResponseEntity removeTag(@CurrentAccount Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();
 
         Tag tag = tagRepository.findByTitle(title);

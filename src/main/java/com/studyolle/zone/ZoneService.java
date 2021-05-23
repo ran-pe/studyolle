@@ -23,7 +23,7 @@ public class ZoneService {
 
     @PostConstruct
     public void initZoneData() throws IOException {
-        if(zoneRepository.count() == 0) {
+        if (zoneRepository.count() == 0) {
             Resource resource = new ClassPathResource("zones_kr.csv");
             List<Zone> zoneList = Files.readAllLines(resource.getFile().toPath(), StandardCharsets.UTF_8).stream()
                     .map(line -> {
