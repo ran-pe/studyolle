@@ -1,4 +1,4 @@
-package com.studyolle.account.form;
+package com.studyolle.tag;
 
 import lombok.Data;
 
@@ -6,5 +6,5 @@ import lombok.Data;
 public class TagForm {
 
     private String tagTitle;
-    
+
 }

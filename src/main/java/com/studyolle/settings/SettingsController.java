@@ -4,8 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studyolle.account.AccountService;
 import com.studyolle.account.CurrentAccount;
-import com.studyolle.account.form.TagForm;
-import com.studyolle.account.form.ZoneForm;
+import com.studyolle.tag.TagForm;
+import com.studyolle.tag.TagService;
+import com.studyolle.zone.ZoneForm;
 import com.studyolle.domain.Account;
 import com.studyolle.domain.Tag;
 import com.studyolle.domain.Zone;
@@ -21,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
@@ -41,17 +41,6 @@ import static com.studyolle.settings.SettingsController.SETTINGS;
 @RequestMapping(ROOT + SETTINGS)
 public class SettingsController {
 
-//    static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile";
-//    static final String SETTINGS_PROFILE_URL = "/" + SETTINGS_PROFILE_VIEW_NAME;
-//    static final String SETTINGS_PASSWORD_VIEW_NAME = "settings/password";
-//    static final String SETTINGS_PASSWORD_URL = "/" + SETTINGS_PASSWORD_VIEW_NAME;
-//    static final String SETTINGS_NOTIFICATIONS_VIEW_NAME = "settings/notifications";
-//    static final String SETTINGS_NOTIFICATIONS_URL = "/" + SETTINGS_NOTIFICATIONS_VIEW_NAME;
-//    static final String SETTINGS_ACCOUNT_VIEW_NAME = "settings/account";
-//    static final String SETTINGS_ACCOUNT_URL = "/" + SETTINGS_ACCOUNT_VIEW_NAME;
-//    static final String SETTINGS_TAGS_VIEW_NAME = "settings/tags";
-//    static final String SETTINGS_TAGS_URL = "/" + SETTINGS_TAGS_VIEW_NAME;
-
     static final String ROOT = "/";
     static final String SETTINGS = "settings";
     static final String PROFILE = "/profile";
@@ -62,6 +51,7 @@ public class SettingsController {
     static final String ZONES = "/zones";
 
     private final AccountService accountService;
+    private final TagService tagService;
     private final ModelMapper modelMapper;
     private final NicknameValidator nicknameValidator;
     private final TagRepository tagRepository;
@@ -168,13 +158,7 @@ public class SettingsController {
     @PostMapping(TAGS + "/add")
     @ResponseBody
     public ResponseEntity addTag(@CurrentAccount Account account, @RequestBody TagForm tagForm) {
-        String title = tagForm.getTagTitle();
-
-        Tag tag = tagRepository.findByTitle(title);
-        if (tag == null) {
-            tag = tagRepository.save(Tag.builder().title(title).build());
-        }
-
+        Tag tag = tagService.findOrCreateNew(tagForm.getTagTitle());
         accountService.addTag(account, tag);
         return ResponseEntity.ok().build();
     }
