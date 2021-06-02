@@ -86,13 +86,9 @@ public class AccountController {
 
     @GetMapping("/profile/{nickname}")
     public String viewProfile(@PathVariable String nickname, Model model, @CurrentAccount Account account) {
-        Account byNickname = accountRepository.findByNickname(nickname);
-        if (nickname == null) {
-            throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
-        }
-
-        model.addAttribute(byNickname);
-        model.addAttribute("isOwner", byNickname.equals(account));
+        Account accountToView = accountService.getAccount(nickname);
+        model.addAttribute(accountToView);
+        model.addAttribute("isOwner", accountToView.equals(account));
         return "account/profile";
     }
 
@@ -104,12 +100,12 @@ public class AccountController {
     @PostMapping("/email-login")
     public String sendEmailLoginLink(String email, Model model, RedirectAttributes attributes) {
         Account account = accountRepository.findByEmail(email);
-        if(account == null) {
+        if (account == null) {
             model.addAttribute("error", "유효한 이메일 주소가 아닙니다");
             return "account/email-login";
         }
 
-        if(!account.canSendConfirmEmail()) {
+        if (!account.canSendConfirmEmail()) {
             model.addAttribute("error", "이메일 로그인은 1시간 뒤에 사용할 수 있습니다.");
             return "account/email-login";
         }
@@ -123,7 +119,7 @@ public class AccountController {
     public String loginByEmail(String token, String email, Model model) {
         Account account = accountRepository.findByEmail(email);
         String view = "account/logged-in-by-email";
-        if(account == null || !account.isValidToken(token)) {
+        if (account == null || !account.isValidToken(token)) {
             model.addAttribute("error", "로그인할 수 없습니다.");
             return view;
         }
