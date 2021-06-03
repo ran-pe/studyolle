@@ -223,7 +223,7 @@ public class studySettingsController {
     @PostMapping("/study/path")
     public String updateStudyPath(@CurrentAccount Account account, @PathVariable String path, String newPath, Model model, RedirectAttributes attributes) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
-        if(!studyService.isValidPath(newPath)){
+        if (!studyService.isValidPath(newPath)) {
             model.addAttribute(account);
             model.addAttribute(study);
             model.addAttribute("studyPathError", "해당 스터디 경로는 사용할 수 없습니다. 다른 값을 입력하세요.");
@@ -237,7 +237,7 @@ public class studySettingsController {
     @PostMapping("/study/title")
     public String updateStudyTitle(@CurrentAccount Account account, @PathVariable String path, String newTitle, Model model, RedirectAttributes attributes) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
-        if(!studyService.isValidTitle(newTitle)){
+        if (!studyService.isValidTitle(newTitle)) {
             model.addAttribute(account);
             model.addAttribute(study);
             model.addAttribute("studyTitleError", "스터디 이름을 다시 입력하세요.");
@@ -246,6 +246,13 @@ public class studySettingsController {
         studyService.updateStudyTitle(study, newTitle);
         attributes.addFlashAttribute("message", "스터디 이름을 수정했습니다");
         return "redirect:/study/" + getPath(path) + "/settings/study";
+    }
+
+    @PostMapping("/study/remove")
+    public String removeStudy(@CurrentAccount Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        studyService.remove(study);
+        return "redirect:/";
     }
 
 }
