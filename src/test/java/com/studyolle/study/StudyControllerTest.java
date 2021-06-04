@@ -4,7 +4,6 @@ import com.studyolle.WithAccount;
 import com.studyolle.account.AccountRepository;
 import com.studyolle.domain.Account;
 import com.studyolle.domain.Study;
-import com.studyolle.study.form.StudyForm;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -71,9 +70,9 @@ public class StudyControllerTest {
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("study/form"))
-        .andExpect(model().hasErrors())
-        .andExpect(model().attributeExists("studyForm"))
-        .andExpect(model().attributeExists("account"));
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeExists("studyForm"))
+                .andExpect(model().attributeExists("account"));
 
         Study study = studyRepository.findByPath("test-path");
         assertNull(study);
@@ -128,19 +127,16 @@ public class StudyControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/study/" + study.getPath() + "/members"));
         assertFalse(study.getMembers().contains(account));
-
-
-
     }
 
-    private Study createStudy(String path, Account manager) {
+    protected Study createStudy(String path, Account manager) {
         Study study = new Study();
         study.setPath(path);
         studyService.createNewStudy(study, manager);
         return study;
     }
 
-    private Account createAccount(String nickname) {
+    protected Account createAccount(String nickname) {
         Account newAccount = new Account();
         newAccount.setNickname(nickname);
         newAccount.setEmail(nickname + "@email.com");
