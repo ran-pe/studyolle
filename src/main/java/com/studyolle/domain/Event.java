@@ -14,7 +14,8 @@ import java.util.List;
 @EqualsAndHashCode(of = "id")
 public class Event {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     @ManyToOne
