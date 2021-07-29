@@ -9,23 +9,33 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
 
     boolean existsByPath(String path);
 
-    @EntityGraph(value = "Study.withAll", type = EntityGraph.EntityGraphType.LOAD)
+    //    @EntityGraph(value = "Study.withAll", type = EntityGraph.EntityGraphType.LOAD) 
+    // 아래와 같이 변경 가능
+    @EntityGraph(attributePaths = {"tags", "zones", "managers", "members"}, type = EntityGraph.EntityGraphType.LOAD)
     Study findByPath(String path);
 
-    @EntityGraph(value = "Study.withTagsAndManagers", type = EntityGraph.EntityGraphType.FETCH)
+    //    @EntityGraph(value = "Study.withTagsAndManagers", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(attributePaths = {"tags", "managers"})
     Study findStudyWithTagsByPath(String path);
 
-    @EntityGraph(value = "Study.withZonesAndManagers", type = EntityGraph.EntityGraphType.FETCH)
+    //    @EntityGraph(value = "Study.withZonesAndManagers", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(attributePaths = {"zones", "managers"})
     Study findStudyWithZonesByPath(String path);
 
-    @EntityGraph(value = "Study.withManagers", type = EntityGraph.EntityGraphType.FETCH)
+    //    @EntityGraph(value = "Study.withManagers", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(attributePaths = "managers")
     Study findStudyWithManagersByPath(String path);
 
-    @EntityGraph(value = "Study.withMembers", type = EntityGraph.EntityGraphType.FETCH)
+    //    @EntityGraph(value = "Study.withMembers", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(attributePaths = "members")
     Study findStudyWithMembersByPath(String path);
 
     Study findStudyOnlyByPath(String path);
 
-    @EntityGraph(value = "Study.withTagsAndZones", type = EntityGraph.EntityGraphType.FETCH)
+    //    @EntityGraph(value = "Study.withTagsAndZones", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(attributePaths = {"zones", "tags"})
     Study findStudyWithTagsAndZonesById(Long id);
+
+    @EntityGraph(attributePaths = {"members", "managers"})
+    Study findStudyWithManagersAndMembersById(Long id);
 }
