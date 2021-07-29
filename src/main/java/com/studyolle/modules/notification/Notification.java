@@ -29,7 +29,7 @@ public class Notification {
     @ManyToOne
     private Account account;    //Notification -> Account(단방향)
 
-    private LocalDateTime createdLocalDateTime;
+    private LocalDateTime createdDateTime;
 
     @Enumerated(EnumType.STRING)
     private NotificationType notificationType;
