@@ -20,7 +20,7 @@ public class PackageDependencyTests {
     @ArchTest
     ArchRule modulesPackageRule = classes().that().resideInAPackage("com.studyolle.modules..")
             .should().onlyBeAccessed().byClassesThat()
-            .resideInAPackage("com.studyolle.modules..");
+            .resideInAnyPackage("com.studyolle.modules..");
 
     @ArchTest
     ArchRule studyPackageRule = classes().that().resideInAPackage("..modules.study..")
