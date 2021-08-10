@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class MainController {
@@ -24,6 +26,10 @@ public class MainController {
         if (account != null) {
             model.addAttribute(account);
         }
+        //최근 9개 스터디 조회(공개했고, 아직 종료하지 않은 스터디)
+        List<Study> studyList = studyRepository.findTop9ByPublishedAndClosedOrderByPublishedDateTimeDesc(true, false);
+        model.addAttribute("studyList", studyList);
+
         return "index";
     }
 
