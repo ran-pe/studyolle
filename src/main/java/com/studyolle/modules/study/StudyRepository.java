@@ -41,5 +41,6 @@ public interface StudyRepository extends JpaRepository<Study, Long>, StudyReposi
     @EntityGraph(attributePaths = {"members", "managers"})
     Study findStudyWithManagersAndMembersById(Long id);
 
-    List<Study> findTop9ByPublishedAndClosedOrderByPublishedDateTimeDesc(boolean published, boolean closed);
+    // 최근 9개의 스터디를 조회해서 화면에 보여줄 것. (공개했고, 아직 종료하지 않은 스터디 중에서)
+    List<Study> findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(boolean published, boolean closed);
 }

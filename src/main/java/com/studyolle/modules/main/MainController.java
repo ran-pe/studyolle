@@ -27,7 +27,7 @@ public class MainController {
             model.addAttribute(account);
         }
         //최근 9개 스터디 조회(공개했고, 아직 종료하지 않은 스터디)
-        List<Study> studyList = studyRepository.findTop9ByPublishedAndClosedOrderByPublishedDateTimeDesc(true, false);
+        List<Study> studyList = studyRepository.findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(true, false);
         model.addAttribute("studyList", studyList);
 
         return "index";
