@@ -1,8 +1,8 @@
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+!**/src/main/**
+!**/src/test/**
 
 ### STS ###
 .apt_generated
@@ -35,6 +35,15 @@ build/
 ### NPM ###
 src/main/resources/static/node_modules
 src/main/resources/static/node
+src/main/resources/static/package-lock.json
 
 ### config ###
-src/main/resources/application-dev.properties
+src/main/resources/application-prod.properties
+
+### gradle ###
+.gradle/**
+gradlew*
+gradle/**
+
+### node ###
+yarn.lock
